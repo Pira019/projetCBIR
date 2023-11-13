@@ -24,7 +24,7 @@ function displayResults(queryImagePath, dirname, rr, r, rs, ormax)
      % Affichez des informations supplémentaires en bas
     annotation('textbox', [0, 0, 1, 0.1], 'String', {
         sprintf('Taux de reconnaissance global : %.2f%%', r * 100),
-        'Taux de reconnaissance moyen par classe de texture :',
+        'Taux de reconnaissance moyen par classe de textures :',
         num2str(rs),
         sprintf('Taux de reconnaissance opérationnel (ORMax) : %.2f%%', ormax * 100)
     }, 'FitBoxToText', 'on', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
