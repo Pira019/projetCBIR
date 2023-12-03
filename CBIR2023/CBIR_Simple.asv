@@ -34,16 +34,17 @@ function [imgsDwt2,imgsSwt2,precisionDwt2,precisionSwt2,imagesPertinentesRecuper
     [~, rr_swt2] = sort(distancesSwt2);
  
     % Évaluation des performances de recherche d'images.
-   %[r, rs, ormax] = evalir(rr_swt2, nbrImage);
+    %[r, rs, ormax] = evalir(rr, nsubs);
  
-    %disp(rs)
+    
  
     % Affichage des résultats.
     %displayResults(queryImagePath, dirname, rr, r, rs, ormax,nbrImage); 
     
     % calcule de la precision% calcule de la precision
-    [precisionDwt2,imagesPertinentesRecupereesDWT2,seuil] = calculerPrecision(rr_dwt2,distancesDwt2,10,nbrImage);
-    [precisionSwt2,imagesPertinentesRecupereesSwt2,seuilSwt] = calculerPrecision(rr_swt2,distancesSwt2,10,nbrImage);  
+    [precisionDwt2,imagesPertinentesRecupereesDWT2,seuil] = calculerPrecision(rr_dwt2,distancesDwt2,50,nbrImage);
+    [precisionSwt2,imagesPertinentesRecupereesSwt2,seuilSwt] = calculerPrecision(rr_swt2,distancesDwt2,50,nbrImage);  
 
-    [imgsDwt2,imgsSwt2] = resultatRecherche(dirname,rr_dwt2,rr_swt2,nbrImage); 
+    [imgsDwt2,imgsSwt2] = resultatRecherche(dirname,rr_dwt2,rr_swt2,nbrImage);
+
 end

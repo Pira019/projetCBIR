@@ -1,4 +1,4 @@
-function [rr,r, rs, ormax]= CBIR_Simple(dirname,nlevels,nsubs)
+function [rr,r, rs, ormax]= CBIR_Simple01(dirname,nlevels,nsubs)
 
 % Input:
 %   dirname: directory that contains all images, e.g. '../VisTex/sub128'

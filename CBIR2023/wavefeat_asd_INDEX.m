@@ -1,4 +1,4 @@
-function [asd] = wavefeat_asd_INDEX(dirname,nlevels)
+function [asd,swt2] = wavefeat_asd_INDEX(dirname,nlevels,filtre)
 
 % Input:
 %   dirname: directory that contains all images, e.g. '../VisTex/sub128'
@@ -10,11 +10,15 @@ function [asd] = wavefeat_asd_INDEX(dirname,nlevels)
 files=dir(dirname);
 % Initialize
 asd  = [];
+swt2  = [];
 
 for i=3:size(files,1)
     
-[fv] = wavefeat_asd([dirname,files(i).name], nlevels);
+[fv] = wavefeat_asd([dirname,files(i).name], nlevels,filtre);
+[fv2] = wavefeat_asd_swt([dirname,files(i).name], nlevels,filtre);
+
  asd  = [asd, fv];
+ swt2  = [swt2, fv2];
 
 end
 

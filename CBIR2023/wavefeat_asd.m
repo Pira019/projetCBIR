@@ -1,30 +1,37 @@
-function [asd] = wavefeat_asd(file, nlevels)
+function [asd] = wavefeat_asd(file, nlevels, filtre)
+% wavefeat_asd : Calcule le vecteur de caractéristiques ASD (Average, Standard Deviation, Energy) des sous-bandes d'une image à l'aide de la décomposition en ondelettes 2D.
 
-% Input:
-%   file: filename of the input texture image.
-%   nlevels: number of wavelet pyramid levels.
+% Entrées :
+%   file : nom de fichier de l'image texture en entrée.
+%   nlevels : nombre de niveaux de la pyramide d'ondelettes.
 
-% Output:
-%   asd: feature vector of average and standard deviation of wavelet subbands.
-im=imread(file);
+% Sortie :
+%   asd : vecteur de caractéristiques comprenant la moyenne, l'écart-type et l'énergie des sous-bandes d'ondelettes.
+
+% Charger l'image
+im = imread(file);
 im = double(rgb2gray(im));
 
-im = (im - mean2(im)) ./ std2(im);      % Image Normalization
+% Normalisation de l'image
+im = (im - mean2(im)) ./ std2(im);
 
-[C,L] = wavedec2(im,nlevels,'db1');    %See Multilevel 2-D wavelet decomposition. Change the filter as you wish.
+% Décomposition en ondelettes 2D
+[C, L] = wavedec2(im, nlevels, filtre);  % Voir la décomposition en ondelettes 2D. Changez le filtre selon les besoins.
 
-nbands = 3 * nlevels;
+nbands = 3 * nlevels + 1;  % Inclure la bande d'approximation
 
-asd = zeros(2 * nbands, 1);
+asd = zeros(3 * nbands, 1);
 
+% Calculer les caractéristiques pour chaque sous-bande
 for b = 1:nbands
-
     band = sbcoef2(C, L, b);
-    
-%     Features from average and standard deviation
-      a= sum(sum(abs(band)))/(size(band,1)*size(band,2));
-      sd= sqrt(sum(sum(abs(band-a).^2))/(size(band,1)*size(band,2)));
-      asd(2*b-1:2*b) = [sd,a];
 
-      %le code utilise des ondelettes orthogonales avec wavedec2 pour extraire des caractéristiques basées sur la moyenne et l'écart type des sous-bandes d'une image de texture spécifiée.
+    % Caractéristiques : moyenne, écart-type et énergie
+    avg = sum(sum(abs(band))) / (size(band, 1) * size(band, 2));
+    sd = sqrt(sum(sum(abs(band - avg).^2)) / (size(band, 1) * size(band, 2)));
+    energy = sum(sum(band.^2)) / (size(band, 1) * size(band, 2));
+
+    % Stocker les caractéristiques dans le vecteur ASD
+    asd(3 * b - 2:3 * b) = [sd, avg, energy];
+end
 end
