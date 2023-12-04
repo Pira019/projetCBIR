@@ -1,0 +1,16 @@
+function  [precision,correctementClassesTopN,seuil] = calculerPrecision(resultats, veriteTerrain, topN,dirname)
+    % Calcule la précision pour les top N résultats en comparant avec la vérité terrain.
+
+  
+    % Limiter les résultats aux top N
+    resultatsTopN = resultats(1:topN);
+    
+    nomsClass=cellstr(obtenirNomsFichiersPourRR(dirname,resultatsTopN));
+    
+    veriteTerrain = cellstr()
+    % Vérifier si la vérité terrain est présente parmi les top N résultats
+    correctementClassesTopN = any(ismember(nomsClass, veriteTerrain));
+    seuil=0;
+    % Calculer la précision pour les top N
+    precision = correctementClassesTopN / min(topN, numel(veriteTerrain));
+end

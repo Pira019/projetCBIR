@@ -1,27 +1,23 @@
-function [veriteTerrain] = obtenirVeriteTerrain(dirname, nsubs)
-    % Obtenir les noms de fichiers (sans extension) de la vérité terrain en fonction de la convention de nommage des fichiers.
+function veriteTerrain = obtenirVeriteTerrain(dirname, nsubs, classeNumeroRequete)
+    % Obtenir les noms de fichiers (sans extension) de la vérité terrain en fonction du format de nommage des fichiers.
     
     % Liste de tous les fichiers dans le répertoire
     fichiers = dir(fullfile(dirname, '*.tif'));
 
-    % Extraire les informations de classe à partir des noms de fichiers
-    nomsClasses = cellfun(@(x) strtok(x, '.'), {fichiers.name}, 'UniformOutput', false);
-
-    % Générer une liste unique de classes
-    classesUniques = unique(nomsClasses);
-
     % Initialiser un tableau de noms pour la vérité terrain
-    veriteTerrain = strings(1, nsubs * numel(classesUniques));
+    veriteTerrain = strings(1, nsubs);
 
-    % Itérer à travers chaque classe et sélectionner les premières images nsubs
+    % Itérer à travers les fichiers de la classe de l'image de requête
     index = 1;
-    for i = 1:numel(classesUniques)
-        imagesClasse = fichiers(strcmp(nomsClasses, classesUniques{i}));
-        imagesClasse = imagesClasse(1:nsubs);  % Sélectionner les premières images nsubs
-        
-        % Ajouter les noms de fichiers sans extension au tableau de vérité terrain
-        [~, fileNames, ~] = cellfun(@fileparts, {imagesClasse.name}, 'UniformOutput', false);
-        veriteTerrain(index:index+nsubs-1) = string(fileNames);
-        index = index + nsubs;
+    imagesClasseRequete = fichiers(contains({fichiers.name}, classeNumeroRequete));
+    imagesClasseRequete = imagesClasseRequete(1:nsubs);  % Sélectionner les premières images nsubs
+
+    % Ajouter les noms de fichiers au tableau de vérité terrain avec le format "nomClass.numClass"
+    for i = 1:nsubs
+        [~, fileName, ~] = fileparts(imagesClasseRequete(i).name);
+        parts = split(fileName, '.');  % Diviser le nom de fichier en parties
+        classe = sprintf('%s', parts{1});  % Format "nomClass.numClass"
+        veriteTerrain(index) = string(classe);
+        index = index + 1;
     end
 end

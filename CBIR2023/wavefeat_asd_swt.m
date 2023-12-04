@@ -4,9 +4,7 @@ function [asd] = wavefeat_asd_swt(file, nlevels, filter)
 
     % Normalisation de l'image.
     im = (im - mean2(im)) / std2(im);
-
-   
-
+    
     % Décomposition en ondelettes stationnaires 2D (SWT2).
     [A, H, V, D] = swt2(im, nlevels, filter);
 
